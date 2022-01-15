@@ -28,6 +28,40 @@ TEST(string_2_addr, incorrect_pairs) {
     }
 }
 
+TEST(large_input, common_test) {
+    const std::string filepath_in = std::string(RESOURCES_PATH) + "/ip_filter.tsv";
+    const std::string filepath_out = std::string(RESOURCES_PATH) + "/result_ip_filter.txt";
+    std::ifstream in(filepath_in);
+    std::ofstream out(filepath_out);
+
+    // 1.
+    auto all_addresses = GetIpList(in);
+    std::sort(all_addresses.begin(), all_addresses.end());
+    std::reverse(all_addresses.begin(), all_addresses.end());
+    PrintIpList(out, all_addresses);
+    // 2.
+    std::vector<IpAddress> task2;
+    std::copy_if(all_addresses.begin(), all_addresses.end(), std::back_inserter(task2), [](const IpAddress& addr){return addr.values[0] == 1;});
+    if (!task2.empty()) {
+        out << "\n";
+    }
+    PrintIpList(out, task2);
+    // 3.
+    std::vector<IpAddress> task3;
+    std::copy_if(all_addresses.begin(), all_addresses.end(), std::back_inserter(task3), [](const IpAddress& addr){return addr.values[0] == 46 && addr.values[1] == 70;});
+    if (!task3.empty()) {
+        out << "\n";
+    }
+    PrintIpList(out, task3);
+    // 4.
+    std::vector<IpAddress> task4;
+    std::copy_if(all_addresses.begin(), all_addresses.end(), std::back_inserter(task4), [](const IpAddress& addr){return addr.values[0] == 46 || addr.values[1] == 46 || addr.values[2] == 46 || addr.values[3] == 46;});
+    if (!task4.empty()) {
+        out << "\n";
+    }
+    PrintIpList(out, task4);
+}
+
 int main(int argc, char **argv) {
     ::testing::InitGoogleTest(&argc, argv);
     return RUN_ALL_TESTS();

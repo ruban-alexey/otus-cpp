@@ -1,4 +1,24 @@
 #include "lib.h"
+#include <iostream>
+
+std::ostream& operator<<(std::ostream& out, const IpAddress& addr) {
+    for(size_t i = 0; i < IpAddress::kIp4AddressLength; ++i) {
+        out << addr.values[i];
+        if (i != IpAddress::kIp4AddressLength - 1) {
+            out << '.';
+        }
+    }
+    return out;
+}
+
+void PrintIpList(std::ostream& out, const std::vector<IpAddress>& list) {
+    for (size_t i = 0; i < list.size(); ++i) {
+        out << list[i];
+        if (i + 1 != list.size()) {
+            out << "\n";
+        }
+    }
+}
 
 std::string ExtractIpFromCsvLine(const std::string& line) {
     std::string res = line;
