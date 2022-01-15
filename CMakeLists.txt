@@ -10,4 +10,11 @@ project(alex_ruban_otus_course VERSION ${PROJECT_VERSION})
 set(CMAKE_CXX_STANDARD 17)
 
 add_subdirectory(01-cicd-setup)
+add_subdirectory(02-ip-filter)
 
+set(CPACK_GENERATOR DEB)
+set(CPACK_PACKAGE_VERSION_MAJOR "${PROJECT_VERSION_MAJOR}")
+set(CPACK_PACKAGE_VERSION_MINOR "${PROJECT_VERSION_MINOR}")
+set(CPACK_PACKAGE_VERSION_PATCH "${PROJECT_VERSION_PATCH}")
+set(CPACK_PACKAGE_CONTACT test@example.com)
+include(CPack)
