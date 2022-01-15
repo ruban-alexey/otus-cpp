@@ -8,7 +8,8 @@ std::string ExtractIpFromCsvLine(const std::string& line) {
 
 IpAddress String2Addr(const std::string& str) {
     IpAddress addr;
-    if (str.empty()) {
+    if (str.empty()
+        || std::count_if(str.begin(), str.end(), [](char ch) {return ch == '.';}) != IpAddress::kIp4AddressLength - 1) {
         return addr; // return incorrect address -1.-1.-1.-1
     }
     int curr = -1;

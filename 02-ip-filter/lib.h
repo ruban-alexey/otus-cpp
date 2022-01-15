@@ -14,6 +14,12 @@ struct IpAddress {
     int& operator[](size_t pos) {
         return values[pos];
     }
+    bool operator==(const IpAddress& other) const {
+        return std::equal(values, values + kIp4AddressLength, other.values);
+    }
+    bool operator!=(const IpAddress& other) const {
+        return !(*this == other);
+    }
 
     int values[kIp4AddressLength] = {-1, -1, -1, -1};
 };
