@@ -2,7 +2,7 @@
 #include <iostream>
 
 std::ostream& operator<<(std::ostream& out, const IpAddress& addr) {
-    for(size_t i = 0; i < IpAddress::kIp4AddressLength; ++i) {
+    for (size_t i = 0; i < IpAddress::kIp4AddressLength; ++i) {
         out << addr.values[i];
         if (i != IpAddress::kIp4AddressLength - 1) {
             out << '.';
@@ -24,19 +24,20 @@ std::string ExtractIpFromCsvLine(const std::string& line) {
 }
 
 IpAddress String2Addr(const std::string& str) {
-    IpAddress addr;
+    IpAddress addr{};
     if (str.empty()
-        || std::count_if(str.begin(), str.end(), [](char ch) {return ch == '.';}) != IpAddress::kIp4AddressLength - 1) {
+        || std::count_if(str.begin(), str.end(), [](char ch) { return ch == '.'; }) != IpAddress::kIp4AddressLength - 1) {
         return addr; // return incorrect address -1.-1.-1.-1
     }
     int curr = -1;
     size_t pos = 0;
     auto it = str.begin();
-    while(pos < IpAddress::kIp4AddressLength && it != str.end()) {
+    while (pos < IpAddress::kIp4AddressLength && it != str.end()) {
         if (*it == '.') {
             addr[pos++] = curr;
             curr = -1;
         } else {
+            // Here could be added symbols validation
             curr = curr == -1 ? (*it - '0') : curr * 10 + (*it - '0');
         }
         ++it;
@@ -54,7 +55,7 @@ std::vector<IpAddress> GetIpList(std::istream& in) {
     std::vector<IpAddress> res;
     std::string buff;
 
-    while(getline(in, buff)) {
+    while (getline(in, buff)) {
         auto ip_addr_str = ExtractIpFromCsvLine(buff);
         res.emplace_back(String2Addr(ip_addr_str));
     }
@@ -69,16 +70,18 @@ void PerformMainTask(std::istream& in, std::ostream& out) {
     std::reverse(all_addresses.begin(), all_addresses.end());
     PrintIpList(out, all_addresses);
 
-    auto sort_and_print = [&all_addresses, &out] (auto predicate) {
+    auto sort_and_print = [&all_addresses, &out](auto predicate) {
         std::vector<IpAddress> buf;
         std::copy_if(all_addresses.begin(), all_addresses.end(), std::back_inserter(buf), predicate);
         PrintIpList(out, buf);
     };
 
     // 2.
-    sort_and_print([](const IpAddress& addr){return addr.values[0] == 1;});
+    sort_and_print([](const IpAddress& addr) { return addr.values[0] == 1; });
     // 3.
-    sort_and_print([](const IpAddress& addr){return addr.values[0] == 46 && addr.values[1] == 70;});
+    sort_and_print([](const IpAddress& addr) { return addr.values[0] == 46 && addr.values[1] == 70; });
     // 4.
-    sort_and_print([](const IpAddress& addr){return addr.values[0] == 46 || addr.values[1] == 46 || addr.values[2] == 46 || addr.values[3] == 46;});
+    sort_and_print([](const IpAddress& addr) {
+        return std::any_of(addr.values.begin(), addr.values.end(), [](int val) {return val == 46;});
+    });
 }

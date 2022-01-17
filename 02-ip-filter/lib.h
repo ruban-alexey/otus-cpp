@@ -11,7 +11,7 @@ struct IpAddress {
     static constexpr size_t kIp4AddressLength = 4;
 
     bool IsValid() {
-        return std::all_of(values.begin(), values.end(), [](int val) {return val >= 0 && val <= 255;});
+        return std::all_of(values.begin(), values.end(), [](int val) { return val >= 0 && val <= 255; });
     }
     int& operator[](size_t pos) {
         return values[pos];
@@ -30,7 +30,7 @@ struct IpAddress {
         return values[idx] < other.values[idx];
     }
 
-    std::array<int, kIp4AddressLength>values;
+    std::array<int, kIp4AddressLength> values = {-1, -1, -1, -1};
 };
 
 std::ostream& operator<<(std::ostream& out, const IpAddress& addr);
