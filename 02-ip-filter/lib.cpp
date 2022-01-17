@@ -13,10 +13,7 @@ std::ostream& operator<<(std::ostream& out, const IpAddress& addr) {
 
 void PrintIpList(std::ostream& out, const std::vector<IpAddress>& list) {
     for (size_t i = 0; i < list.size(); ++i) {
-        out << list[i];
-        if (i + 1 != list.size()) {
-            out << "\n";
-        }
+        out << list[i] << "\n";
     }
 }
 
@@ -63,4 +60,25 @@ std::vector<IpAddress> GetIpList(std::istream& in) {
     }
 
     return res;
+}
+
+void PerformMainTask(std::istream& in, std::ostream& out) {
+    // 1.
+    auto all_addresses = GetIpList(in);
+    std::sort(all_addresses.begin(), all_addresses.end());
+    std::reverse(all_addresses.begin(), all_addresses.end());
+    PrintIpList(out, all_addresses);
+
+    auto sort_and_print = [&all_addresses, &out] (auto predicate) {
+        std::vector<IpAddress> buf;
+        std::copy_if(all_addresses.begin(), all_addresses.end(), std::back_inserter(buf), predicate);
+        PrintIpList(out, buf);
+    };
+
+    // 2.
+    sort_and_print([](const IpAddress& addr){return addr.values[0] == 1;});
+    // 3.
+    sort_and_print([](const IpAddress& addr){return addr.values[0] == 46 && addr.values[1] == 70;});
+    // 4.
+    sort_and_print([](const IpAddress& addr){return addr.values[0] == 46 || addr.values[1] == 46 || addr.values[2] == 46 || addr.values[3] == 46;});
 }

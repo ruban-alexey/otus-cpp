@@ -1,10 +1,11 @@
 #pragma once
 
-#include <vector>
-#include <string>
-#include <array>
 #include <algorithm>
+#include <array>
 #include <fstream>
+#include <iostream>
+#include <string>
+#include <vector>
 
 struct IpAddress {
     static constexpr size_t kIp4AddressLength = 4;
@@ -36,6 +37,7 @@ std::ostream& operator<<(std::ostream& out, const IpAddress& addr);
 
 void PrintIpList(std::ostream& out, const std::vector<IpAddress>& list);
 
+void PerformMainTask(std::istream& in = std::cin, std::ostream& out = std::cout);
 IpAddress String2Addr(const std::string& str);
 std::string ExtractIpFromCsvLine(const std::string& line);
 std::vector<IpAddress> GetIpList(std::istream& in);
