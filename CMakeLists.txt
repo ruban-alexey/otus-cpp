@@ -22,6 +22,7 @@ add_subdirectory(3d-party)
 ## Homeworks
 add_subdirectory(01-cicd-setup)
 add_subdirectory(02-ip-filter)
+add_subdirectory(03-allocator)
 
 ## Package config
 set(CPACK_GENERATOR DEB)
