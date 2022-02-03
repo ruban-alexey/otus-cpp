@@ -1,6 +1,6 @@
 #pragma once
 
-template <typename T, class Allocator = std::allocator<T>>
+template<typename T, class Allocator = std::allocator<T>>
 class MyContainer {
     struct Node {
         explicit Node(T* data) : data(data) {};
@@ -11,7 +11,7 @@ class MyContainer {
         Node* node;
         explicit Iterator(Node* nd) : node(nd) {}
         T& operator*() {
-            return * node->data;
+            return *node->data;
         }
         Iterator operator++() {
             node = node->next;
@@ -28,7 +28,7 @@ class MyContainer {
   public:
     ~MyContainer() {
         Node* next = begin_;
-        while(next != nullptr) {
+        while (next != nullptr) {
             Node* tmp = next->next;
             allocator_.deallocate(next->data, 1);
             delete next;
@@ -55,17 +55,17 @@ class MyContainer {
     Iterator end() const {
         return Iterator(last_);
     }
-    bool empty() const  {
+    bool empty() const {
         return begin() == end();
     }
     size_t size() const {
         return size_;
     }
     T& front() const {
-        return begin_->data;
+        return *begin_->data;
     }
     T& back() const {
-        return end_()->data;
+        return *end_->data;
     }
   private:
     Node* begin_{nullptr};

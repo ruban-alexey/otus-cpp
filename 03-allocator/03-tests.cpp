@@ -2,6 +2,7 @@
 
 #include <string>
 #include <list>
+
 #include "allocator.h"
 #include "container.h"
 
@@ -57,6 +58,8 @@ TEST(container, with_different_allocators) {
 
         ASSERT_FALSE(list.empty());
         ASSERT_EQ(list.size(), N);
+        ASSERT_EQ(list.back(), N - 1);
+        ASSERT_EQ(list.front(), 0);
         std::stringstream out;
         for (auto& val : list) {
             out << val << ' ';
