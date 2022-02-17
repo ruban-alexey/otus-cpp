@@ -12,6 +12,25 @@ namespace {
         std::string s;
         int* ptr{nullptr};
     };
+    class CustomStructure {
+      public:
+        CustomStructure() {
+            custom_structure_ctor_cnt++;
+        }
+        CustomStructure(int) {
+            custom_structure_ctor_cnt++;
+        }
+        CustomStructure(const CustomStructure& cs) {
+            custom_structure_ctor_cnt++;
+        }
+        ~CustomStructure() {
+            custom_structure_dtor_cnt++;
+        }
+        static int custom_structure_ctor_cnt;
+        static int custom_structure_dtor_cnt;
+    };
+    int CustomStructure::custom_structure_ctor_cnt = 0;
+    int CustomStructure::custom_structure_dtor_cnt = 0;
 }
 
 TEST(allocator, with_stl_containers) {
@@ -66,6 +85,21 @@ TEST(container, with_different_allocators) {
         }
         ASSERT_EQ(out.str(), expected);
     }
+}
+
+TEST(container, custom_structure) {
+    {
+        CustomStructure::custom_structure_ctor_cnt = 0;
+        CustomStructure::custom_structure_dtor_cnt = 0;
+        constexpr int N = 3;
+        MyContainer<CustomStructure, MyAllocator<CustomStructure, N>> list;
+        CustomStructure cs;
+        list.push(cs);
+        list.emplace_back(3);
+        list.emplace_back(34);
+    }
+
+    ASSERT_EQ(CustomStructure::custom_structure_ctor_cnt, CustomStructure::custom_structure_dtor_cnt);
 }
 
 int main(int argc, char **argv) {

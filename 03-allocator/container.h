@@ -30,6 +30,7 @@ class MyContainer {
         Node* next = begin_;
         while (next != nullptr) {
             Node* tmp = next->next;
+            allocator_.destroy(next->data);
             allocator_.deallocate(next->data, 1);
             delete next;
             next = tmp;
@@ -37,7 +38,22 @@ class MyContainer {
     }
     void push(const T& value) {
         T* p = allocator_.allocate(1);
-        *p = value;
+        allocator_.construct(p, value);
+        size_++;
+        if (begin_ == nullptr) {
+            begin_ = new Node(p);
+            end_ = begin_;
+            begin_->next = last_;
+        } else {
+            end_->next = new Node(p);
+            end_ = end_->next;
+            last_ = end_->next;
+        }
+    }
+    template<class... Args>
+    void emplace_back(Args... args) {
+        T* p = allocator_.allocate(1);
+        allocator_.construct(p, args...);
         size_++;
         if (begin_ == nullptr) {
             begin_ = new Node(p);
