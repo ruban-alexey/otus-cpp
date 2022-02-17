@@ -23,6 +23,7 @@ add_subdirectory(3d-party)
 add_subdirectory(01-cicd-setup)
 add_subdirectory(02-ip-filter)
 add_subdirectory(03-allocator)
+add_subdirectory(04-sfinae)
 
 ## Package config
 set(CPACK_GENERATOR DEB)
