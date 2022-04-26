@@ -4,26 +4,7 @@
 #include <type_traits>
 #include <vector>
 
-/*
- * Output operator for printing two types of containers: list and vector
- * By default puts comma between elements
- */
-template<
-    template<typename, typename> typename Container,
-    typename Type,
-    typename Allocator = std::allocator<Type>,
-    typename = std::enable_if_t<
-        std::is_same_v<Container<Type, Allocator>, std::vector<Type, Allocator>> ||
-            std::is_same_v<Container<Type, Allocator>, std::list<Type, Allocator>>>>
-std::ostream& operator<<(std::ostream& os, const Container<Type, Allocator>& container) {
-    for (auto iter = std::begin(container); iter != std::end(container); ++iter) {
-        if (iter != std::begin(container))
-            std::cout << ", ";
-        os << *iter;
-    }
-    return os;
-}
-
+/// Prints integer value splitted by 8-byte and converted into uint8_t representation
 template<typename T, std::enable_if_t<std::is_integral<T>::value, bool> = true>
 void print_ip(T val) {
     for(int i = sizeof(T) - 1; i >= 0; --i) {
@@ -36,12 +17,17 @@ void print_ip(T val) {
     std::cout << "\n";
 }
 
+/// Just prints input stribn
 template<typename T, typename = std::enable_if_t<std::is_same_v<typename std::remove_cv<typename std::remove_reference<T>::type>::type,
                                                                 std::string>>>
 void print_ip(T val) {
     std::cout << val << "\n";
 }
 
+/*
+ * Output operator for printing two types of containers: list and vector
+ * By default puts '.' between elements
+ */
 template<
     template<typename, typename> typename Container,
     typename Type,
